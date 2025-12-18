@@ -5,24 +5,16 @@ class Battery:
         self.joltage = joltage
 
     def get_max_joltage(self, number_of_battery_slots) -> int:
-        digits = {i: 0 for i in range(number_of_battery_slots)}
-        for i in range(len(self.joltage)):
-            current_digit = int(self.joltage[i])
-            for slot in range(number_of_battery_slots):
-                if len(digits) > slot and digits[slot] == 9:
-                    continue
-                if current_digit > digits[slot] and i + number_of_battery_slots < len(self.joltage) - 1:
-                    digits[slot] = current_digit
-                    for next_slot in range(slot + 1, number_of_battery_slots):
-                        digits[next_slot] = 0
-                    break
+        digits = []
+        search_list = self.joltage
+        for i in range(number_of_battery_slots):
+            last_possible_index = len(search_list) - (number_of_battery_slots - i - 1)
+            current_search_list = search_list[:last_possible_index]
+            max_possible_digit = max(list(current_search_list))
+            digits.append(int(max_possible_digit))
 
-            # if i + number_of_battery_slots == len(self.joltage) - 1:
-            #     break
-
-        print(digits)
-        max_joiltage = int("".join(str(x) for x in digits.values()))
-        print(max_joiltage)
+            search_list = search_list[search_list.find(max_possible_digit) + 1:]
+        max_joiltage = int("".join(str(x) for x in digits))
         return int(max_joiltage)
 
     # def get_max_joltage(self) -> int:
@@ -63,12 +55,12 @@ def main():
     import sys
     # puzzle_input = sys.stdin.read().strip()
     # with open("mini-input.txt", "r") as f:
-    with open("super-mini-input.txt", "r") as f:
-    # with open("input.txt", "r") as f:
+    # with open("super-mini-input.txt", "r") as f:
+    with open("input.txt", "r") as f:
         puzzle_input = f.read().strip()
     battery_bank = BatteryBank(puzzle_input)
     print(battery_bank.get_total_max_joltage(2))
-    # print(battery_bank.get_total_max_joltage(12))
+    print(battery_bank.get_total_max_joltage(12))
 
 
 if __name__ == "__main__":
