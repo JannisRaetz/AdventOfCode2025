@@ -10,6 +10,9 @@ class Battery:
         for i in range(number_of_battery_slots):
             last_possible_index = len(search_list) - (number_of_battery_slots - i - 1)
             current_search_list = search_list[:last_possible_index]
+            if len(current_search_list) == 1:
+                digits.extend(list(search_list))
+                break
             max_possible_digit = max(list(current_search_list))
             digits.append(int(max_possible_digit))
 
@@ -53,11 +56,12 @@ class BatteryBank:
 
 def main():
     import sys
-    # puzzle_input = sys.stdin.read().strip()
+    print("Go!", flush=True)
+    puzzle_input = sys.stdin.read().strip()
     # with open("mini-input.txt", "r") as f:
     # with open("super-mini-input.txt", "r") as f:
-    with open("input.txt", "r") as f:
-        puzzle_input = f.read().strip()
+    # with open("input.txt", "r") as f:
+    #     puzzle_input = f.read().strip()
     battery_bank = BatteryBank(puzzle_input)
     print(battery_bank.get_total_max_joltage(2))
     print(battery_bank.get_total_max_joltage(12))
