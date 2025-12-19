@@ -4,7 +4,7 @@ class Grid:
         self.width = len(new_grid[0])
         self.grid = new_grid
         self.number_of_accessable_cells = 0
-        self.number_of_rolls = sum(row.count("@") for row in new_grid)
+        self.number_of_removed_rolls = 0
 
 
     def print_grid(self):
@@ -13,6 +13,7 @@ class Grid:
 
     def mark_accessable_cell(self, corner_limit):
         number_of_neighbors = 0
+        self.number_of_accessable_cells = 0
         for i in range(self.height):
             for j in range(self.width):
                 if self.grid[i][j] == "@":
@@ -41,7 +42,7 @@ class Grid:
             for j in range(self.width):
                 if self.grid[i][j] == "X":
                     self.grid[i][j] = "."
-                    self.number_of_rolls -= 1
+                    self.number_of_removed_rolls += 1
 
     def iterate_removing_accessable_marks(self, corner_limit):
         while self.number_of_accessable_cells > 0:
@@ -51,21 +52,26 @@ class Grid:
     def print_number_of_accessable_cells(self):
         print(self.number_of_accessable_cells)
 
+    def print_number_of_removed_rolls(self):
+        print(self.number_of_removed_rolls)
+
 
 def main():
     import sys
     print("Go!", flush=True)
-    # puzzle_input = sys.stdin.read().strip()
-    with open("mini-input.txt", "r") as f:
+    puzzle_input = sys.stdin.read().strip()
+    puzzle_input = [list(line) for line in puzzle_input.splitlines()]
+    # with open("mini-input.txt", "r") as f:
     # with open("super-mini-input.txt", "r") as f:
     # with open("input.txt", "r") as f:
-        puzzle_input = f.read().strip()
-        puzzle_input = [list(line) for line in puzzle_input.splitlines()]
+    #     puzzle_input = f.read().strip()
+    #     puzzle_input = [list(line) for line in puzzle_input.splitlines()]
     grid = Grid(puzzle_input)
     grid.mark_accessable_cell(corner_limit=4)
     grid.print_number_of_accessable_cells()
-    # grid.iterate_removing_accessable_marks(corner_limit=4)
-    # grid.print_number_of_accessable_cells()
+    grid.remove_accessable_marks()
+    grid.iterate_removing_accessable_marks(corner_limit=4)
+    grid.print_number_of_removed_rolls()
 
 if __name__ == "__main__":
     main()
